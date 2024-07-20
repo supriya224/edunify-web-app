@@ -45,7 +45,7 @@ const Header = () => {
             <ul key={index} className="flex justify-center">
               <Link
                 href={item.link}
-                className="hover:scale-125 duration-300 py-1 hover:text-orange-400"
+                className="hover:scale-125 duration-300 py-1 hover:text-green-400"
               >
                 <li>{item.title}</li>
               </Link>
@@ -65,7 +65,6 @@ const Header = () => {
               onClick={toggleSearch}
               className="cursor-pointer hover:scale-125 duration-300"
             />
-            <ShoppingCart className="hover:scale-125 duration-300" />
           </div>
 
           <button
