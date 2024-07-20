@@ -86,31 +86,33 @@ const HomePage = () => {
                         alt="Uploaded"
                         className="w-full h-fit object-cover rounded-lg"
                         loading="lazy"
+                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 100px"
+                       
                       />
                     </div>
                   )}
                   <div className="px-3 py-3">
-                    <p className="text-sm font-bold">
+                    <h3 className="text-sm font-bold">
                       Name-
                       {data.first_name}
                       {data.last_name}
-                    </p>
-                    <p className="text-sm"> {data.email}</p>
-                    <p className="text-xs">{data.address}</p>
-                    <p className="text-xs">{data.mobile_number}</p>
+                    </h3>
+                    <h3 className="text-sm"> {data.email}</h3>
+                    <h3 className="text-xs">{data.address}</h3>
+                    <h3 className="text-xs">{data.mobile_number}</h3>
                   </div>
                   <div className="flex gap-2 p-3 ">
                     <button
                       onClick={() => handleEdit(data, index)}
                       className="bg-yellow-500 text-white rounded-full p-2"
                     >
-                      <Edit size={15} />
+                      <Edit size={15} loading="lazy" />
                     </button>
                     <button
                       onClick={() => handleDelete(data.id)}
                       className="bg-red-500 text-white p-2 rounded-full"
                     >
-                      <Trash size={15} />
+                      <Trash size={15} loading="lazy" />
                     </button>
                   </div>
                 </div>

@@ -25,9 +25,9 @@ const Footer = () => {
           </div>
           <div className="flex flex-wrap lg:gap-32 flex-grow mt-10 -mb-10 text-center md:pl-20 md:mt-0 md:text-left">
             <div className="w-full px-4 lg:w-1/4 md:w-1/2">
-              <h2 className="mb-3 text-sm font-medium tracking-widest  uppercase title-font">
+              <h3 className="mb-3 text-sm font-medium tracking-widest  uppercase title-font">
                 Platform
-              </h2>
+              </h3>
               <nav className="mb-10 list-none">
                 <li className="mt-3">
                   <a className=" cursor-pointer">Terms &amp; Privacy</a>
@@ -41,9 +41,9 @@ const Footer = () => {
               </nav>
             </div>
             <div className="w-full px-4 lg:w-1/4 md:w-1/2">
-              <h2 className="mb-3 text-sm font-medium tracking-widest  uppercase title-font">
+              <h3 className="mb-3 text-sm font-medium tracking-widest  uppercase title-font">
                 Contact
-              </h2>
+              </h3>
               <nav className="mb-10 list-none">
                 <li className="mt-3">
                   <a className=" cursor-pointer ">Send a Message</a>
@@ -65,8 +65,11 @@ const Footer = () => {
               src="https://uniformapp.in/images/small_logo.png"
               alt=""
               height={100}
+              loading="lazy"
+            
+      
             />
-            <h3>copywrite:  Uniform Ventures Pvt. Ltd.</h3>
+            <h3>copywrite: Uniform Ventures Pvt. Ltd.</h3>
           </div>
         </div>
       </footer>

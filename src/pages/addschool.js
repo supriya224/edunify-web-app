@@ -92,7 +92,7 @@ const Addschool = ({ isOpen, onClose, currentData, loadData }) => {
           onClick={handleClose}
           className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 transition-colors duration-200"
         >
-          <X size={30} className="bg-gray-200 rounded-full p-2" />
+          <X size={30} className="bg-gray-200 rounded-full p-2"  />
         </button>
         <h3 className="text-3xl font-semibold mb-6 text-center">
           {currentData ? "Edit School Data" : "Add School Data"}

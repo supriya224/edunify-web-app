@@ -39,6 +39,8 @@ const Header = () => {
           src="https://uniformapp.in/images/small_logo.png"
           alt=""
           height={150}
+          loading='lazy'
+      
         />
         <div className="hidden lg:flex gap-7 text-md items-center text-white ">
           {header.map((item, index) => (
