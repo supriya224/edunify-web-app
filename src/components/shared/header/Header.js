@@ -25,7 +25,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="border-b h-32 bg-gradient-to-t from-sky-800 to-purple-900 relative">
+    <header className="border-b h-32 bg-gradient-to-t from-[#1c4a5a]  to-purple-500 relative">
       <div className="mx-auto container p-1 flex justify-between text-white">
         <h3 className="font-light text-center tracking-wide">
           mail@uniformapp.in
@@ -40,7 +40,7 @@ const Header = () => {
           alt=""
           height={150}
         />
-        <div className="hidden lg:flex gap-7 text-md items-center ">
+        <div className="hidden lg:flex gap-7 text-md items-center text-white ">
           {header.map((item, index) => (
             <ul key={index} className="flex justify-center">
               <Link
