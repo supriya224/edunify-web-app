@@ -1,4 +1,5 @@
 "use client";
+import supabase from "@/config/supabaseClient";
 import Addschool from "@/pages/addschool";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
@@ -6,10 +7,31 @@ import { Trash } from "react-feather";
 import { Edit } from "react-feather";
 
 const HomePage = () => {
+  console.log("supabase", supabase)
+  // const [schoolData, setSchoolData] = useState(null);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [schoolData, setSchoolData] = useState([]);
+  const [schoolData, setSchoolData] = useState();
   const [currentData, setCurrentData] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async() => {
+      const {data, error} = await supabase
+      .from('school data')
+      .select()
+
+      if(error) {
+        setSchoolData(null);
+        console.log("error");
+      }
+
+      if(data) {
+        setSchoolData(data)
+      }
+    }
+   fetchData()
+  }, [])
 
   const handleOpenModal = () => {
     setCurrentData(null);
@@ -18,16 +40,16 @@ const HomePage = () => {
 
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const loadData = () => {
-    const data = localStorage.getItem("schoolData");
-    if (data) {
-      setSchoolData(JSON.parse(data));
-    }
-  };
+  // const loadData = () => {
+  //   const data = localStorage.getItem("schoolData");
+  //   if (data) {
+  //     setSchoolData(JSON.parse(data));
+  //   }
+  // };
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  // useEffect(() => {
+  //   loadData();
+  // }, []);
 
   const handleEdit = (data, index) => {
     setCurrentData(data);
@@ -35,11 +57,17 @@ const HomePage = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (index) => {
-    const updatedData = [...schoolData];
-    updatedData.splice(index, 1);
-    setSchoolData(updatedData);
-    localStorage.setItem("schoolData", JSON.stringify(updatedData));
+  const handleDelete = async (id) => {
+    const { error } = await supabase
+      .from('school data')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error("Error deleting data:", error);
+    } else {
+      setSchoolData(schoolData.filter((data) => data.id !== id));
+    }
   };
 
   return (
@@ -62,17 +90,17 @@ const HomePage = () => {
             onClose={handleCloseModal}
             currentData={currentData}
             currentIndex={currentIndex}
-            loadData={loadData}
+            // loadData={loadData}
           />
           <button
-            onClick={loadData}
+            // onClick={loadData}
             className="bg-green-400 text-white p-3 rounded-2xl"
           >
             Show Data Here
           </button>
         </div>
         <div className="container mx-auto flex flex-wrap items-center justify-center">
-          {schoolData.length > 0 && (
+          {schoolData && (
             <div className="my-1 p-4 shadow-lg shadow-gray-400 rounded-lg w-full max-w-5xl ">
             
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
@@ -95,13 +123,13 @@ const HomePage = () => {
                     )}
                     <div className="flex ">
                       <p className="text-sm">
-                        {data.firstname}
-                        {data.lastname}
+                        {data.first_name}
+                        {data.last_name}
                       </p>
                     </div>
                     <p className="text-sm"> {data.email}</p>
                     <p className="text-sm">{data.address}</p>
-                    <p>{data.number}</p>
+                    <p>{data.mobile_number}</p>
                     <div className="flex justify-between">
                       <button
                         onClick={() => handleEdit(data, index)}
@@ -110,7 +138,7 @@ const HomePage = () => {
                         <Edit />
                       </button>
                       <button
-                        onClick={() => handleDelete(index)}
+                        onClick={() => handleDelete(data.id)}
                         className="bg-red-500 text-white p-2 rounded-full"
                       >
                         <Trash />

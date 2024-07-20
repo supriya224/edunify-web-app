@@ -1,35 +1,122 @@
+import supabase from "@/config/supabaseClient";
 import React, { useEffect, useState } from "react";
 import { X } from "react-feather";
 
 const Addschool = ({ isOpen, onClose, currentData, currentIndex, loadData }) => {
   const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
+    first_name: "",
+    last_name: "",
     email: "",
     address: "",
-    number: "",
-    file: null,
+    mobile_number: "",
+    // file: null,
   });
-  const [fileName, setFileName] = useState("");
+  // const [fileName, setFileName] = useState("");
 
+  // useEffect(() => {
+  //   if (currentData) {
+  //     setFormData(currentData);
+  //     if (currentData.file && typeof currentData.file === "string") {
+  //       setFileName(currentData.file);
+  //     } else {
+  //       setFileName("");
+  //     }
+  //   } else {
+  //     setFormData({
+  //       first_name: "",
+  //       last_name: "",
+  //       email: "",
+  //       address: "",
+  //       mobile_number: "",
+  //       file: null,
+  //     });
+  //     setFileName("");
+  //   }
+  // }, [currentData]);
+
+  // if (!isOpen) return null;
+
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData({ ...formData, [name]: value });
+  // };
+
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setFormData({ ...formData, file });
+  //   setFileName(file.name);
+  // };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   let fileBase64 = "";
+  //   if (formData.file && typeof formData.file === "object") {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(formData.file);
+  //     reader.onloadend = () => {
+  //       fileBase64 = reader.result;
+  //       saveData(fileBase64);
+  //     };
+  //   } else {
+  //     fileBase64 = formData.file;
+  //     saveData(fileBase64);
+  //   }
+  // };
+
+
+  // const saveData = (fileBase64) => {
+  //   let storedData = JSON.parse(localStorage.getItem("schoolData")) || [];
+  //   if (!Array.isArray(storedData)) {
+  //     storedData = [];
+  //   }
+  //   const newFormData = { ...formData, file: fileBase64 };
+  //   if (currentIndex !== null) {
+  //     storedData[currentIndex] = newFormData;
+  //   } else {
+  //     storedData.push(newFormData);
+  //   }
+  //   localStorage.setItem("schoolData", JSON.stringify(storedData));
+  //   loadData();
+  //   setFormData({
+  //     first_name: "",
+  //     last_name: "",
+  //     email: "",
+  //     address: "",
+  //     mobile_number: "",
+  //     file: null,
+  //   });
+  //   setFileName("");
+  //   onClose();
+  // };
+
+  // const handleSubmit = async(e) => {
+  //   e.preventDefault()
+     
+  //   // if(!first_name || !last_name || !email || !address || !mobile_number){
+  //   //   return <h1>Please fill all details</h1>
+  //   // }
+
+  //   const {data, error} = await supabase
+  //   .from("school data")
+  //   .insert([formData])
+
+  //   if (error) {
+  //     console.error("Error inserting data:", error);
+  //   } else {
+  //     console.log("Data inserted:", data);
+  //     onClose();  // Close the modal after successful insertion
+  //   }
+  // }
   useEffect(() => {
     if (currentData) {
       setFormData(currentData);
-      if (currentData.file && typeof currentData.file === "string") {
-        setFileName(currentData.file);
-      } else {
-        setFileName("");
-      }
     } else {
       setFormData({
-        firstname: "",
-        lastname: "",
+        first_name: "",
+        last_name: "",
         email: "",
         address: "",
-        number: "",
-        file: null,
+        mobile_number: "",
       });
-      setFileName("");
     }
   }, [currentData]);
 
@@ -40,51 +127,34 @@ const Addschool = ({ isOpen, onClose, currentData, currentIndex, loadData }) => 
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData({ ...formData, file });
-    setFileName(file.name);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let fileBase64 = "";
-    if (formData.file && typeof formData.file === "object") {
-      const reader = new FileReader();
-      reader.readAsDataURL(formData.file);
-      reader.onloadend = () => {
-        fileBase64 = reader.result;
-        saveData(fileBase64);
-      };
-    } else {
-      fileBase64 = formData.file;
-      saveData(fileBase64);
-    }
-  };
+    if (currentData) {
+      // Update existing data
+      const { data, error } = await supabase
+        .from("school data")
+        .update(formData)
+        .eq("id", currentData.id);
 
-  const saveData = (fileBase64) => {
-    let storedData = JSON.parse(localStorage.getItem("schoolData")) || [];
-    if (!Array.isArray(storedData)) {
-      storedData = [];
-    }
-    const newFormData = { ...formData, file: fileBase64 };
-    if (currentIndex !== null) {
-      storedData[currentIndex] = newFormData;
+      if (error) {
+        console.error("Error updating data:", error);
+      } else {
+        console.log("Data updated:", data);
+        onClose();
+      }
     } else {
-      storedData.push(newFormData);
+      // Insert new data
+      const { data, error } = await supabase
+        .from("school data")
+        .insert([formData]);
+
+      if (error) {
+        console.error("Error inserting data:", error);
+      } else {
+        console.log("Data inserted:", data);
+        onClose();
+      }
     }
-    localStorage.setItem("schoolData", JSON.stringify(storedData));
-    loadData();
-    setFormData({
-      firstname: "",
-      lastname: "",
-      email: "",
-      address: "",
-      number: "",
-      file: null,
-    });
-    setFileName("");
-    onClose();
   };
 
   return (
@@ -103,8 +173,8 @@ const Addschool = ({ isOpen, onClose, currentData, currentIndex, loadData }) => 
               <label className="w-1/3 text-sm font-semibold text-gray-700 text-right">First Name</label>
               <input
                 type="text"
-                name="firstname"
-                value={formData.firstname}
+                name="first_name"
+                value={formData.first_name}
                 placeholder="First Name"
                 onChange={handleChange}
                 className="p-3 border border-gray-300 rounded-lg flex-1 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
@@ -115,8 +185,8 @@ const Addschool = ({ isOpen, onClose, currentData, currentIndex, loadData }) => 
               <label className="w-1/3 text-sm font-semibold text-gray-700 text-right">Last Name</label>
               <input
                 type="text"
-                name="lastname"
-                value={formData.lastname}
+                name="last_name"
+                value={formData.last_name}
                 placeholder="Last Name"
                 onChange={handleChange}
                 className="p-3 border border-gray-300 rounded-lg flex-1 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
@@ -148,18 +218,18 @@ const Addschool = ({ isOpen, onClose, currentData, currentIndex, loadData }) => 
               />
             </div>
             <div className="flex items-center gap-4">
-              <label className="w-1/3 text-sm font-semibold text-gray-700 text-right">Contact Number</label>
+              <label className="w-1/3 text-sm font-semibold text-gray-700 text-right">Contact mobile_number</label>
               <input
                 type="tel"
-                name="number"
-                value={formData.number}
-                placeholder="Contact Number"
+                name="mobile_number"
+                value={formData.mobile_number}
+                placeholder="Contact mobile_number"
                 onChange={handleChange}
                 className="p-3 border border-gray-300 rounded-lg flex-1 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
                 required
               />
             </div>
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <label className="w-1/3 text-sm font-semibold text-gray-700 text-right">Upload Image</label>
               <input
                 type="file"
@@ -169,7 +239,7 @@ const Addschool = ({ isOpen, onClose, currentData, currentIndex, loadData }) => 
               {fileName && (
                 <span className="text-sm text-gray-500">{fileName}</span>
               )}
-            </div>
+            </div> */}
             <button
               type="submit"
               className="bg-blue-500 text-white py-3 rounded-lg w-full hover:bg-blue-600 transition-colors duration-300"
